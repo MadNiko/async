@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="1. Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="2. Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="3. Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="1. Файлы заголовков\async">
+      <UniqueIdentifier>{78291e03-7123-48ed-8d9c-0e4e7f70d34b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\async.hpp">
+      <Filter>1. Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\details__impl.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\manager.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\manager__impl.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\multi_promise.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\multi_promise__impl.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\pool.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\pool_threads_always.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\pool_threads_ondemand.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\promise.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\promise__impl.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\promise_errc.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\promise_send.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\promise_send__impl.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\promise_types.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\value.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\value_or_promise.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\logger.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\logger_wostream.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\config.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\async\logger_wostream_impl.hpp">
+      <Filter>1. Файлы заголовков\async</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\async\promise_errc.cpp">
+      <Filter>2. Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\async\logger_wostream.cpp">
+      <Filter>2. Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
