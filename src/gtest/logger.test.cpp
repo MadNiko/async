@@ -24,6 +24,9 @@ protected: // testing::Test
 
 protected:
 
+    void master_method()
+    {}
+
     async::logger_wostream m_log_impl;
     async::logger* m_log;
 };
