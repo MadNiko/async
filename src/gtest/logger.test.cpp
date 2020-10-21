@@ -22,6 +22,9 @@ protected: // testing::Test
         m_log = nullptr;
     }
 
+    void test_1_method()
+    {}
+
 protected:
 
     async::logger_wostream m_log_impl;
