@@ -25,6 +25,9 @@ protected: // testing::Test
     void test_1()
     {}
 
+    void test_2()
+    {}
+
 protected:
 
     async::logger_wostream m_log_impl;
