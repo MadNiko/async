@@ -22,6 +22,9 @@ protected: // testing::Test
         m_log = nullptr;
     }
 
+    void test_1()
+    {}
+
 protected:
 
     void master_method()
