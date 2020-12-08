@@ -5,11 +5,29 @@
     <_PropertySheetDisplayName>Settings (gtest)</_PropertySheetDisplayName>
   </PropertyGroup>
 
+  <PropertyGroup Label="Configuration">
+    <AsyncConfiguration Condition="'$(Configuration)'=='Test-HeaderOnly'"    >HeaderOnly</AsyncConfiguration>
+    <AsyncConfiguration Condition="'$(Configuration)'=='Test-DebugStatic'"   >DebugStatic</AsyncConfiguration>
+    <AsyncConfiguration Condition="'$(Configuration)'=='Test-ReleaseStatic'" >ReleaseStatic</AsyncConfiguration>
+    <AsyncConfiguration Condition="'$(Configuration)'=='Test-DebugDynamic'"  >DebugDynamic</AsyncConfiguration>
+    <AsyncConfiguration Condition="'$(Configuration)'=='Test-ReleaseDynamic'">ReleaseDynamic</AsyncConfiguration>
+  </PropertyGroup>
+
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(MSBuildThisFileDirectory)use_async.props" />
+  </ImportGroup>
+  
   <PropertyGroup Label="UserMacros">
     <GTestRootDir>$(MSBuildThisFileDirectory)..\..\..\</GTestRootDir>
     <GTestSrcDir>$(GTestRootDir)src\</GTestSrcDir>
-    <GTestBuildDir>$(GTestRootDir)build\$(ProjectName).$(Configuration).$(PlatformTarget)\</GTestBuildDir>
-    <GTestBinDir>$(GTestRootDir)bin\$(ProjectName).$(Configuration).$(PlatformTarget)\</GTestBinDir>
+    <GTestSubPath>GTest.$(Configuration).$(PlatformTarget)\</GTestSubPath>
+    <GTestBuildDir>$(GTestRootDir)build\$(GTestSubPath)</GTestBuildDir>
+    <GTestBinDir>$(GTestRootDir)bin\$(GTestSubPath)</GTestBinDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutDir>$(GTestBinDir)</OutDir>
+    <IntDir>$(GTestBuildDir)</IntDir>
   </PropertyGroup>
 
   <ItemDefinitionGroup>
@@ -21,5 +39,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
+  
+  
 
 </Project>

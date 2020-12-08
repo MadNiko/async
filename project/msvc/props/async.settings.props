@@ -5,17 +5,25 @@
     <_PropertySheetDisplayName>Settings (async library)</_PropertySheetDisplayName>
   </PropertyGroup>
 
+  <PropertyGroup Label="Configuration">
+    <AsyncConfiguration Condition="'$(AsyncConfiguration)'==''">HeaderOnly</AsyncConfiguration>
+  </PropertyGroup>
+
   <PropertyGroup Label="UserMacros">
     <AsyncRootDir    Condition="'$(AsyncRootDir)'    == ''">$(MSBuildThisFileDirectory)..\..\..\</AsyncRootDir>
     <AsyncIncludeDir Condition="'$(AsyncIncludeDir)' == ''">$(AsyncRootDir)include\</AsyncIncludeDir>
-    <AsyncBuildDir   Condition="'$(AsyncBuildDir)'   == ''">$(AsyncRootDir)build\$(ProjectName).$(Configuration).$(PlatformTarget)\</AsyncBuildDir>
-    <AsyncLibDir     Condition="'$(AsyncLibDir)'     == ''">$(AsyncRootDir)lib\$(ProjectName).$(Configuration).$(PlatformTarget)\</AsyncLibDir>
-    <AsyncBinDir     Condition="'$(AsyncBinDir)'     == ''">$(AsyncRootDir)bin\$(ProjectName).$(Configuration).$(PlatformTarget)\</AsyncBinDir>
+    <AsyncSubPath    Condition="'$(AsyncSubPath)'    == ''">Async.$(AsyncConfiguration).$(PlatformTarget)\</AsyncSubPath>
+    <AsyncBuildDir   Condition="'$(AsyncBuildDir)'   == ''">$(AsyncRootDir)build\$(AsyncSubPath)</AsyncBuildDir>
+    <AsyncLibDir     Condition="'$(AsyncLibDir)'     == ''">$(AsyncRootDir)lib\$(AsyncSubPath)</AsyncLibDir>
+    <AsyncBinDir     Condition="'$(AsyncBinDir)'     == ''">$(AsyncRootDir)bin\$(AsyncSubPath)</AsyncBinDir>
   </PropertyGroup>
 
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(AsyncIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(AsyncConfiguration)'=='HeaderOnly'">ASYNC_LIB_HEADERS_ONLY</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(AsyncConfiguration)'=='DebugDynamic'">ASYNC_LIB_DYNAMIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(AsyncConfiguration)'=='ReleaseDynamic'">ASYNC_LIB_DYNAMIC</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
 

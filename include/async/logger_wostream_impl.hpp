@@ -1,6 +1,4 @@
 
-#pragma once
-
 #include <ctime>
 #include <thread>
 #include <cassert>
@@ -11,17 +9,17 @@
 namespace async
 {
 
-#ifndef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
+#ifdef ASYNC_LIB_HEADERS_ONLY
 #else
-    thread_local std::size_t logger_wostream::m_scope_level{ 0 };
+    static thread_local std::size_t gs_scope_level{ 0 };
 #endif
 
-    inline logger_wostream::logger_wostream(std::wostream& stream) noexcept
+    ASYNC_INLINE logger_wostream::logger_wostream(std::wostream& stream) noexcept
         : logger{}
         , m_str_ref{ stream }
     {}
 
-    inline void logger_wostream::message(std::wstring_view text) noexcept
+    ASYNC_INLINE void logger_wostream::message(std::wstring_view text) noexcept
     {
         try
         {
@@ -30,7 +28,7 @@ namespace async
         catch (...) {}
     }
 
-    inline void logger_wostream::exception(std::exception_ptr except, std::wstring_view failed_action) noexcept
+    ASYNC_INLINE void logger_wostream::exception(std::exception_ptr except, std::wstring_view failed_action) noexcept
     {
         (void)except;
         try
@@ -41,7 +39,7 @@ namespace async
         catch (...) {}
     }
 
-    inline void logger_wostream::enter_to_scope(std::wstring_view scope_name) noexcept
+    ASYNC_INLINE void logger_wostream::enter_to_scope(std::wstring_view scope_name) noexcept
     {
         try
         {
@@ -50,17 +48,17 @@ namespace async
         }
         catch (...) {}
 
-#ifndef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
+#ifdef ASYNC_LIB_HEADERS_ONLY
 #else
-            m_scope_level += 1;
+        gs_scope_level += 1;
 #endif
     }
 
-    inline void logger_wostream::leave_scope(std::wstring_view scope_name) noexcept
+    ASYNC_INLINE void logger_wostream::leave_scope(std::wstring_view scope_name) noexcept
     {
-#ifndef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
+#ifdef ASYNC_LIB_HEADERS_ONLY
 #else
-            m_scope_level -= 1;
+        gs_scope_level -= 1;
 #endif
 
         try
@@ -71,7 +69,7 @@ namespace async
         catch (...) {}
     }
 
-    inline std::size_t logger_wostream::print_head()
+    ASYNC_INLINE std::size_t logger_wostream::print_head()
     {
         const std::time_t t(std::time(nullptr));
         const std::tm tm(*std::localtime(&t));
@@ -89,11 +87,11 @@ namespace async
 
         m_str_ref << buffer;
 
-#ifndef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
+#ifdef ASYNC_LIB_HEADERS_ONLY
         m_str_ref << L' ';
-        return head_size;
+        return head_size + 1;
 #else
-        const std::size_t space_size{ 4 * m_scope_level + 1 };
+        const std::size_t space_size{ 4 * gs_scope_level + 1 };
         const std::streamsize save_width = m_str_ref.width(space_size);
         m_str_ref << L' ';
         m_str_ref.width(save_width);
@@ -101,7 +99,7 @@ namespace async
 #endif
     }
 
-    inline std::wostream& logger_wostream::print_multiline(std::size_t head_size, std::wstring_view text)
+    ASYNC_INLINE std::wostream& logger_wostream::print_multiline(std::size_t head_size, std::wstring_view text)
     {
         constexpr std::wstring_view new_line_markers{ L"\r\n"sv };
 

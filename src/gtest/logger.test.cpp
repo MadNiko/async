@@ -11,6 +11,7 @@ protected: // testing::Test
 
     logger()
         : m_log_impl{ std::wcout }
+        , m_log{ nullptr }
     {}
 
     virtual void SetUp() override
@@ -44,8 +45,8 @@ TEST_F(logger, compiletime_msg_2_params)
 TEST_F(logger, compiletime_scope_1_param)
 {
     const async::log_scope log_scope_guard_0(m_log, m_log);
-    const async::log_scope log_scope_guard_1(m_log, L"scope"s);
-    const async::log_scope log_scope_guard_2(m_log, L"scope"sv);
+    const async::log_scope log_scope_guard_1(m_log, L"scope-s"s);
+    const async::log_scope log_scope_guard_2(m_log, L"scope-sv"sv);
 }
 TEST_F(logger, compiletime_scope_3_params)
 {

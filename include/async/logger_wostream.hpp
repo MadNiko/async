@@ -3,19 +3,18 @@
 
 #include <iostream>
 
-#include <async\config.hpp>
 #include <async\logger.hpp>
 
 
 namespace async
 {
 
-    class logger_wostream : public logger
+    class ASYNC_LIB_API logger_wostream : public logger
     {
 
     public:
 
-        inline logger_wostream(std::wostream& stream) noexcept;
+        logger_wostream(std::wostream& stream) noexcept;
 
     public:
 
@@ -36,16 +35,11 @@ namespace async
     private:
 
         std::wostream& m_str_ref;
-
-#ifndef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
-#else
-        static thread_local std::size_t m_scope_level;
-#endif
     };
 
 } // namespace async
 
 
-#ifndef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
+#ifdef ASYNC_LIB_HEADERS_ONLY
 #   include <async\logger_wostream_impl.hpp>
 #endif

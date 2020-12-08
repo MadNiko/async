@@ -6,7 +6,6 @@
 #include <variant>
 #include <exception>
 #include <type_traits>
-#include <functional>
 
 
 
@@ -19,6 +18,8 @@ namespace async
 	template<class _Value, bool _HasPromiseValue>
 	class value_base_t
 	{
+		using this_t = value_base_t<_Value, _HasPromiseValue>;
+
 	protected:
 
 		using value_type = std::decay_t<_Value>;
@@ -29,23 +30,25 @@ namespace async
 			std::variant<std::monostate, store_value_type, promise<value_type>, std::exception_ptr>
 		>;
 
+	public:
+
 		static constexpr std::size_t index_store_empty{ 0 };
 		static constexpr std::size_t index_store_value{ 1 };
 		static constexpr std::size_t index_store_except{ std::variant_size_v<store_t>-1 };
 
 	public:
 
-		inline bool has_value()  const noexcept
+		[[nodiscard]] inline bool has_value()  const noexcept
 		{
 			return (index_store_value == m_store.index());
 		}
 
-		inline bool has_except() const noexcept
+		[[nodiscard]] inline bool has_except() const noexcept
 		{
 			return (index_store_except == m_store.index());
 		}
 
-		inline bool is_established() const noexcept
+		[[nodiscard]] inline bool is_established() const noexcept
 		{
 			return (index_store_empty != m_store.index());
 		}
@@ -56,7 +59,7 @@ namespace async
 			m_store.emplace<index_store_except>(except);
 		}
 
-		inline std::exception_ptr get_except() const
+		[[nodiscard]] inline std::exception_ptr get_except() const
 		{
 			assert(index_store_except == m_store.index());
 			return std::get<index_store_except>(m_store);
@@ -74,7 +77,7 @@ namespace async
 			return m_store.emplace<index_store_value>(std::forward<_Args>(args)...);
 		}
 
-		inline void set_value(value_base_t&& other)
+		inline void set_value(this_t&& other)
 		{
 			assert(!is_established());
 			m_store = std::move(other.m_store);
@@ -87,7 +90,7 @@ namespace async
 			m_store.emplace<index_store_value>(std::forward<_Value2>(value2));
 		}
 
-		inline store_value_type& get_value() &
+		[[nodiscard]] inline store_value_type& get_value() &
 		{
 			if (index_store_value != m_store.index())
 				rethrow_except();
@@ -95,7 +98,7 @@ namespace async
 			return std::get<index_store_value>(m_store);
 		}
 
-		inline store_value_type&& get_value() &&
+		[[nodiscard]] inline store_value_type&& get_value() &&
 		{
 			if (index_store_value != m_store.index())
 				rethrow_except();
@@ -103,7 +106,7 @@ namespace async
 			return std::get<index_store_value>(std::move(m_store));
 		}
 
-		inline const store_value_type& get_value() const &
+		[[nodiscard]] inline const store_value_type& get_value() const &
 		{
 			if (index_store_value != m_store.index())
 				rethrow_except();
@@ -111,7 +114,7 @@ namespace async
 			return std::get<index_store_value>(m_store);
 		}
 
-		inline const store_value_type&& get_value() const &&
+		[[nodiscard]] inline const store_value_type&& get_value() const &&
 		{
 			if (index_store_value != m_store.index())
 				rethrow_except();
@@ -119,28 +122,28 @@ namespace async
 			return std::get<index_store_value>(std::move(m_store));
 		}
 
-		inline void swap(value_base_t& other)
+		inline void swap(this_t& other) noexcept
 		{
 			m_store.swap(other.m_store);
 		}
 
 	protected:
 
-		store_t& store() & noexcept { return m_store; }
-		const store_t& store() const & noexcept { return m_store; }
-		store_t&& store() && noexcept { return std::move(m_store); }
-		const store_t&& store() const && noexcept { return std::move(m_store); }
+		[[nodiscard]] inline store_t& store() & noexcept { return m_store; }
+		[[nodiscard]] inline const store_t& store() const & noexcept { return m_store; }
+		[[nodiscard]] inline store_t&& store() && noexcept { return std::move(m_store); }
+		[[nodiscard]] inline const store_t&& store() const && noexcept { return std::move(m_store); }
 
 		friend class value_base_t<_Value, true>;
 
 		template<class _Value, class other_store_t = typename value_base_t<_Value, false>::store_t>
-		other_store_t& other_store(value_base_t<_Value, false>& other) const noexcept
+		[[nodiscard]] static other_store_t& other_store(value_base_t<_Value, false>& other) noexcept
 		{
 			return other.m_store;
 		}
 
 		template<class _Value, class other_store_t = typename value_base_t<_Value, false>::store_t>
-		other_store_t&& other_store(value_base_t<_Value, false>&& other) const noexcept
+		[[nodiscard]] static other_store_t&& other_store(value_base_t<_Value, false>&& other) noexcept
 		{
 			return std::move(other.m_store);
 		}
@@ -157,23 +160,23 @@ namespace async
 	template<>
 	class value_t<void> : public value_base_t<void, false>
 	{
-		using _Base = value_base_t<void, false>;
+		using base_t = value_base_t<void, false>;
 
 	public:
 
 		inline void emplace_value()
 		{
-			_Base::emplace_value();
+			base_t::emplace_value();
 		}
 
-		inline void set_value(_Base&& other)
+		inline void set_value(base_t&& other)
 		{
-			_Base::set_value(std::move(other));
+			base_t::set_value(std::move(other));
 		}
 
 		inline void set_value()
 		{
-			_Base::set_value(store_value_type{});
+			base_t::set_value(store_value_type{});
 		}
 
 		inline void get_value() const
@@ -185,7 +188,7 @@ namespace async
 
 
 	template<class _Value>
-	inline value_t<_Value> make_value(_Value&& value)
+	[[nodiscard]] inline value_t<_Value> make_value(_Value&& value)
 	{
 		static_assert(!std::is_void_v<_Value>);
 		static_assert(!std::is_same_v<_Value, std::exception_ptr>);
@@ -196,7 +199,7 @@ namespace async
 		return result;
 	}
 	template<class _Value>
-	inline value_t<_Value> make_value()
+	[[nodiscard]] inline value_t<_Value> make_value()
 	{
 		static_assert(std::is_void_v<_Value>);
 
@@ -206,14 +209,14 @@ namespace async
 		return result;
 	}
 	template<class _Value>
-	inline value_t<_Value> make_value(value_t<_Value> value)
+	[[nodiscard]] inline value_t<_Value> make_value(value_t<_Value> val_value) noexcept
 	{
-		return std::move(value);
+		return std::move(val_value);
 	}
 
 
 	template<class _Value, bool _HasPromiseValue>
-	inline void swap(value_base_t<_Value, _HasPromiseValue>& left, value_base_t<_Value, _HasPromiseValue>& right)
+	inline void swap(value_base_t<_Value, _HasPromiseValue>& left, value_base_t<_Value, _HasPromiseValue>& right) noexcept
 	{
 		left.swap(right);
 	}

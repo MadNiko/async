@@ -80,7 +80,6 @@ namespace async::details
 		case result_state_t::executable: return "executable"s;
 		default:                         return "<unknown>"s;
 		}
-		__assume(false);
 	}
 
 	using task_variant_t = std::variant<pool::task_t, pool::more_tasks_t>;

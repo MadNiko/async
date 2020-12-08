@@ -2,6 +2,7 @@
 #pragma once
 
 
+#include <async\value.hpp>
 #include <async\promise.hpp>
 
 
@@ -10,17 +11,20 @@ namespace async
 	template<class _Value>
 	class value_or_promise_base_t : public value_base_t<_Value, true>
 	{
-		static constexpr std::size_t index_store_promise{ index_store_value + 1 };
+		using base_t = value_base_t<_Value, true>;
+		using this_t = value_or_promise_base_t<_Value>;
 
-		static_assert(index_store_empty == 0);
-		static_assert(index_store_value == index_store_empty + 1);
-		static_assert(index_store_promise == index_store_value + 1);
-		static_assert(index_store_except == index_store_promise + 1);
-		static_assert(std::variant_size_v<store_t> == 4);
+		static constexpr std::size_t index_store_promise{ base_t::index_store_value + 1 };
+
+		static_assert(base_t::index_store_empty == 0);
+		static_assert(base_t::index_store_value == base_t::index_store_empty + 1);
+		static_assert(this_t::index_store_promise == base_t::index_store_value + 1);
+		static_assert(base_t::index_store_except == this_t::index_store_promise + 1);
+		static_assert(std::variant_size_v<base_t::store_t> == 4);
 
 	public:
 
-		using value_base_t<_Value, true>::set_value;
+		using base_t::set_value;
 
 		inline void set_value(value_t<_Value>&& val_value)
 		{
@@ -60,39 +64,39 @@ namespace async
 		inline void set_promise(promise<_Value>&& promise_value)
 		{
 			assert(!is_established());
-			store().emplace<index_store_promise>(std::forward<promise<_Value>>(promise_value));
+			store().emplace<index_store_promise>(std::move(promise_value));
 		}
 
-		inline promise<_Value>& get_promise() &
+		[[nodiscard]] inline promise<_Value>& get_promise() &
 		{
 			if (index_store_promise != store().index())
 				rethrow_except();
-			else
-				return std::get<index_store_promise>(store());
+			
+			return std::get<index_store_promise>(store());
 		}
 
-		inline promise<_Value>&& get_promise() &&
+		[[nodiscard]] inline promise<_Value>&& get_promise() &&
 		{
 			if (index_store_promise != store().index())
 				rethrow_except();
-			else
-				return std::get<index_store_promise>(std::move(store()));
+			
+			return std::get<index_store_promise>(std::move(store()));
 		}
 
-		inline const promise<_Value>& get_promise() const &
+		[[nodiscard]] inline const promise<_Value>& get_promise() const &
 		{
 			if (index_store_promise != store().index())
 				rethrow_except();
-			else
-				return std::get<index_store_promise>(store());
+			
+			return std::get<index_store_promise>(store());
 		}
 
-		inline const promise<_Value>&& get_promise() const &&
+		[[nodiscard]] inline const promise<_Value>&& get_promise() const &&
 		{
 			if (index_store_promise != store().index())
 				rethrow_except();
-			else
-				return std::get<index_store_promise>(std::move(store()));
+			
+			return std::get<index_store_promise>(std::move(store()));
 		}
 	};
 
@@ -103,41 +107,41 @@ namespace async
 	template<>
 	class value_or_promise_t<void> : public value_or_promise_base_t<void>
 	{
-		using _Base = value_or_promise_base_t<void>;
+		using base_t = value_or_promise_base_t<void>;
 
 	public:
 
 		inline void emplace_value()
 		{
-			_Base::emplace_value();
+			base_t::emplace_value();
 		}
 
 		inline void set_value(value_t<void>&& val_value)
 		{
-			_Base::set_value(std::move(val_value));
+			base_t::set_value(std::move(val_value));
 		}
 
 		inline void set_value()
 		{
-			_Base::set_value(store_value_type{});
+			base_t::set_value(store_value_type{});
 		}
 
 		inline void get_value() const
 		{
-			_Base::get_value();
+			[[maybe_unused]] const store_value_type value{ base_t::get_value() };
 		}
 	};
 
 
 
 	template<class _Value>
-	inline value_t<_Value> make_value(value_or_promise_t<_Value> value)
+	[[nodiscard]] inline value_t<_Value> make_value(value_or_promise_t<_Value> value)
 	{
-		return value.take_value_t(result);
+		return value.take_value_t();
 	}
 
 	template<class _Value>
-	inline value_or_promise_t<_Value> make_value_or_promise(_Value&& value)
+	[[nodiscard]] inline value_or_promise_t<_Value> make_value_or_promise(_Value&& value)
 	{
 		static_assert(!std::is_void_v<_Value>);
 		static_assert(!std::is_same_v<_Value, std::exception_ptr>);
@@ -148,7 +152,7 @@ namespace async
 		return result;
 	}
 	template<class _Value>
-	inline value_or_promise_t<_Value> make_value_or_promise()
+	[[nodiscard]] inline value_or_promise_t<_Value> make_value_or_promise()
 	{
 		static_assert(std::is_void_v<_Value>);
 
@@ -158,7 +162,7 @@ namespace async
 		return result;
 	}
 	template<class _Value>
-	inline value_or_promise_t<_Value> make_value_or_promise(value_t<_Value> value)
+	[[nodiscard]] inline value_or_promise_t<_Value> make_value_or_promise(value_t<_Value> value)
 	{
 		value_or_promise_t<_Value> result{};
 		result.set_value(std::move(value));
@@ -166,7 +170,7 @@ namespace async
 		return result;
 	}
 	template<class _Value>
-	inline value_or_promise_t<_Value> make_value_or_promise(value_or_promise_t<_Value> value)
+	[[nodiscard]] inline value_or_promise_t<_Value> make_value_or_promise(value_or_promise_t<_Value> value) noexcept
 	{
 		return std::move(value);
 	}

@@ -28,14 +28,15 @@ protected:
 
     async::manager m_manager;
 };
+
 TEST_F(ondemand, 1)
 {
     EXPECT_EQ(hardware_thread_count, m_manager.max_threads_count());
-    EXPECT_EQ(0, m_manager.busy_threads_count());
+    EXPECT_EQ(std::size_t{ 0 }, m_manager.busy_threads_count());
 }
 
 TEST_F(ondemand, 2)
 {
     EXPECT_EQ(hardware_thread_count, m_manager.max_threads_count());
-    EXPECT_EQ(0, m_manager.busy_threads_count());
+    EXPECT_EQ(std::size_t{ 0 }, m_manager.busy_threads_count());
 }

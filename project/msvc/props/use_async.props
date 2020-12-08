@@ -8,8 +8,14 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="$(MSBuildThisFileDirectory)async.settings.props"/>
   </ImportGroup>
-  
-  <!--<ItemDefinitionGroup Condition="'$(ConfigurationType)'=='StaticLibrary'">
+
+  <ItemGroup Condition="'$(AsyncConfiguration)'!='HeaderOnly'">
+    <ProjectReference Include="..\async\async.vcxproj">
+      <Project>{0bc7a66b-0e4e-4588-bcd8-0e2daccb2172}</Project>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemDefinitionGroup Condition="'$(AsyncConfiguration)'!='HeaderOnly'">
     <Link>
       <AdditionalDependencies>async.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(AsyncLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -18,6 +24,6 @@
       <AdditionalDependencies>async.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(AsyncLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
-  </ItemDefinitionGroup>-->
+  </ItemDefinitionGroup>
   
 </Project>

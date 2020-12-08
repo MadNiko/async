@@ -1,6 +1,7 @@
 
 #include <async\config.hpp>
+#include <async\logger_wostream.hpp>
 
-#ifdef ASYNC_LIBRARY_USED_AS_NOT_HEADERS_ONLY
+#ifndef ASYNC_LIB_HEADERS_ONLY
 #   include <async\logger_wostream_impl.hpp>
 #endif

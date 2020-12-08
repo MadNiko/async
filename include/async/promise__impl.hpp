@@ -95,13 +95,17 @@ namespace async
 			*arg_data->pool,
 			[log_ctx = details::normalize_log_ctx(std::move(log_ctx)), res_data, arg_data, fnc_thn = std::move(thn), fnc_fnly = std::move(fnly)](pool::ctx_t pool_ctx)
 		{
+			assert(std::get<pool*>(pool_ctx));
+			assert(std::get<pool*>(pool_ctx)->log());
+			logger* const logger{ std::get<pool*>(pool_ctx)->log() };
+
 			res_data->log_ctx.swap(arg_data->log_ctx);
 			details::append_log_ctx(res_data->log_ctx, log_ctx);
 
-			value_or_promise_t<_Result2> result{ details::then_then<_Result2, _Result>(res_data->log_ctx, arg_data->result.value, fnc_thn) };
+			value_or_promise_t<_Result2> result{ details::then_then<_Result2, _Result>(logger, res_data->log_ctx, arg_data->result.value, fnc_thn) };
 
 			if (fnc_fnly)
-				result = details::then_finaly(res_data->log_ctx, std::move(result), fnc_fnly);
+				result = details::then_finaly(logger, res_data->log_ctx, std::move(result), fnc_fnly);
 
 			details::api<_Result2>::set_result(std::move(pool_ctx), res_data, std::move(result));
 		});
@@ -144,13 +148,17 @@ namespace async
 			*arg_data->pool,
 			[log_ctx = details::normalize_log_ctx(std::move(log_ctx)), res_data, arg_data, fnc_scss = std::move(scss), fnc_rjct = std::move(rjct), fnc_fnly = std::move(fnly)](pool::ctx_t pool_ctx)
 		{
+			assert(std::get<pool*>(pool_ctx));
+			assert(std::get<pool*>(pool_ctx)->log());
+			logger* const logger{ std::get<pool*>(pool_ctx)->log() };
+
 			res_data->log_ctx.swap(arg_data->log_ctx);
 			details::append_log_ctx(res_data->log_ctx, log_ctx);
 
-			value_or_promise_t<_Result2> result{ details::then_success_reject<_Result2, _Result>(res_data->log_ctx, arg_data->result.value, fnc_scss, fnc_rjct) };
+			value_or_promise_t<_Result2> result{ details::then_success_reject<_Result2, _Result>(logger, res_data->log_ctx, arg_data->result.value, fnc_scss, fnc_rjct) };
 
 			if (fnc_fnly)
-				result = details::then_finaly(res_data->log_ctx, std::move(result), fnc_fnly);
+				result = details::then_finaly(logger, res_data->log_ctx, std::move(result), fnc_fnly);
 
 			details::api<_Result2>::set_result(std::move(pool_ctx), res_data, std::move(result));
 		});
@@ -193,13 +201,17 @@ namespace async
 			*arg_data->pool,
 			[log_ctx = details::normalize_log_ctx(std::move(log_ctx)), res_data, arg_data, fnc_scss = std::move(scss), fnc_fnly = std::move(fnly)](pool::ctx_t pool_ctx)
 		{
+			assert(std::get<pool*>(pool_ctx));
+			assert(std::get<pool*>(pool_ctx)->log());
+			logger* const logger{ std::get<pool*>(pool_ctx)->log() };
+
 			res_data->log_ctx.swap(arg_data->log_ctx);
 			details::append_log_ctx(res_data->log_ctx, log_ctx);
 
-			value_or_promise_t<_Result2> result{ details::then_success<_Result2, _Result>(res_data->log_ctx, arg_data->result.value, fnc_scss) };
+			value_or_promise_t<_Result2> result{ details::then_success<_Result2, _Result>(logger, res_data->log_ctx, arg_data->result.value, fnc_scss) };
 
 			if (fnc_fnly)
-				result = details::then_finaly(res_data->log_ctx, std::move(result), fnc_fnly);
+				result = details::then_finaly(logger, res_data->log_ctx, std::move(result), fnc_fnly);
 
 			details::api<_Result2>::set_result(std::move(pool_ctx), res_data, std::move(result));
 		});
@@ -241,13 +253,17 @@ namespace async
 			*arg_data->pool,
 			[log_ctx = details::normalize_log_ctx(std::move(log_ctx)), res_data, arg_data, fnc_rjct = std::move(rjct), fnc_fnly = std::move(fnly)](pool::ctx_t pool_ctx)
 		{
+			assert(std::get<pool*>(pool_ctx));
+			assert(std::get<pool*>(pool_ctx)->log());
+			logger* const logger{ std::get<pool*>(pool_ctx)->log() };
+
 			res_data->log_ctx.swap(arg_data->log_ctx);
 			details::append_log_ctx(res_data->log_ctx, log_ctx);
 
-			value_or_promise_t<_Result> result{ details::then_reject<_Result>(res_data->log_ctx, std::move(arg_data->result.value), fnc_rjct) };
+			value_or_promise_t<_Result> result{ details::then_reject<_Result>(logger, res_data->log_ctx, std::move(arg_data->result.value), fnc_rjct) };
 
 			if (fnc_fnly)
-				result = details::then_finaly(res_data->log_ctx, std::move(result), fnc_fnly);
+				result = details::then_finaly(logger, res_data->log_ctx, std::move(result), fnc_fnly);
 
 			details::api<_Result>::set_result(std::move(pool_ctx), res_data, std::move(result));
 		});
@@ -276,13 +292,17 @@ namespace async
 			*arg_data->pool,
 			[log_ctx = details::normalize_log_ctx(std::move(log_ctx)), res_data, arg_data, fnc_fnly = std::move(fnly)](pool::ctx_t pool_ctx)
 		{
+			assert(std::get<pool*>(pool_ctx));
+			assert(std::get<pool*>(pool_ctx)->log());
+			logger* const logger{ std::get<pool*>(pool_ctx)->log() };
+
 			res_data->log_ctx.swap(arg_data->log_ctx);
 			details::append_log_ctx(res_data->log_ctx, log_ctx);
 
 			value_or_promise_t<_Result> arg_data_result;
 			arg_data_result.set_value(std::move(arg_data->result.value));
 
-			details::api<_Result>::set_result(std::move(pool_ctx), res_data, details::then_finaly<_Result>(res_data->log_ctx, std::move(arg_data_result), fnc_fnly));
+			details::api<_Result>::set_result(std::move(pool_ctx), res_data, details::then_finaly<_Result>(logger, res_data->log_ctx, std::move(arg_data_result), fnc_fnly));
 		});
 
 		return res_promise;

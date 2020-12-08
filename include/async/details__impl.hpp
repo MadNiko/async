@@ -662,7 +662,7 @@ namespace async::details
 				if (new_state == 0)
 				{
                     // trace
-                    log_msg(res_data->pool->log(), L'[', res_data->log_ctx, L"] [number: "sv, arg_mumber, L" of "sv, size, ((shared_data->res_values.has_value()) ? L"] Received value" : L"] Received exception"));
+                    log_msg(res_data->pool->log(), L'[', res_data->log_ctx, L"] [number: "sv, arg_mumber, L" of "sv, size, ((shared_data->res_values.has_value()) ? L"] Received value"sv : L"] Received exception"sv));
 
 					details::api<typle_values_t>::set_result(std::move(pool_ctx), res_data, std::move(shared_data->res_values));
 				}

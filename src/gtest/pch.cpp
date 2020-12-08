@@ -4,9 +4,9 @@
 //
 
 
-#include <thread>
-
 #include "pch.h"
+
+#include <thread>
 
 
 const std::size_t hardware_thread_count{ std::thread::hardware_concurrency() };

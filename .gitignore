@@ -32,5 +32,6 @@
 *.app
 
 bin/*
+lib/*
 build/*
 project/msvc/.vs/*
